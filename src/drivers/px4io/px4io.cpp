@@ -1286,6 +1286,24 @@ PX4IO::io_set_rc_config()
 		input_map[ichan - 1] = 4;
 	}
 
+	/* AUX1 */
+	param_get(param_find("RC_MAP_AUX1"), &ichan);
+	if ((ichan > 0) && (ichan <= (int)_max_rc_input)) {
+		input_map[ichan - 1] = 5;
+	}
+
+	/* AUX2 */
+	param_get(param_find("RC_MAP_AUX2"), &ichan);
+	if ((ichan > 0) && (ichan <= (int)_max_rc_input)) {
+		input_map[ichan - 1] = 6;
+	}
+
+	/* AUX3 */
+	param_get(param_find("RC_MAP_AUX3"), &ichan);
+	if ((ichan > 0) && (ichan <= (int)_max_rc_input)) {
+		input_map[ichan - 1] = 7;
+	}
+
 	/* MAIN MODE SWITCH */
 	param_get(param_find("RC_MAP_MODE_SW"), &ichan);
 	if ((ichan > 0) && (ichan <= (int)_max_rc_input)) {
