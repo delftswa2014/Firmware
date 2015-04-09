@@ -1739,6 +1739,8 @@ MPU6000::measure()
 	arb.y_raw = report.accel_y;
 	arb.z_raw = report.accel_z;
 
+    _last_temperature = (report.temp) / 361.0f + 35.0f;
+
 	float xraw_f = report.accel_x;
 	float yraw_f = report.accel_y;
 	float zraw_f = report.accel_z;
@@ -1756,9 +1758,9 @@ MPU6000::measure()
     arb.z = _accel_filter_z.apply(z_in_new);
     
     //temperature compensated
-	float x_in_new_tc = _accel_comp->get(0, (xraw_f * _accel_range_scale), report.temp);
-	float y_in_new_tc = _accel_comp->get(1, (yraw_f * _accel_range_scale), report.temp);
-	float z_in_new_tc = _accel_comp->get(2, (zraw_f * _accel_range_scale), report.temp);
+	float x_in_new_tc = _accel_comp->get(0, arb.x, _last_temperature);
+	float y_in_new_tc = _accel_comp->get(1, arb.y, _last_temperature);
+	float z_in_new_tc = _accel_comp->get(2, arb.z, _last_temperature);
 
     arb.x_tc = _accel_filter_x_tc.apply(x_in_new_tc);
     arb.y_tc = _accel_filter_y_tc.apply(y_in_new_tc);
@@ -1766,8 +1768,6 @@ MPU6000::measure()
 
 	arb.scaling = _accel_range_scale;
 	arb.range_m_s2 = _accel_range_m_s2;
-
-	_last_temperature = (report.temp) / 361.0f + 35.0f;
 
 	arb.temperature_raw = report.temp;
 	arb.temperature = _last_temperature;
